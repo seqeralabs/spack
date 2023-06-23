@@ -17,9 +17,13 @@ class UcscBedgraphtobigwig(Package):
     depends_on("libpng")
     depends_on("libuuid")
     depends_on("gmake")
-    depends_on("mysql-connector-c")
     depends_on("openssl")
     depends_on("zlib")
+    # This package has known issues installing with the latest MySQL because
+    # MySQL removed the type my_bool, while mariadb didn't.
+    # https://groups.google.com/a/soe.ucsc.edu/g/genome/c/mIT6fe9l99g
+    depends_on("mysql-client")
+    conflicts("mysql@8.0.0:")
 
     def setup_build_environment(self, env):
         env.set("MYSQLLIBS", "-lmysqlclient")
