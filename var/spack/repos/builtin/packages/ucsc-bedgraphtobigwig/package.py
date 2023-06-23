@@ -26,10 +26,6 @@ class UcscBedgraphtobigwig(Package):
         env.set("BINDIR", "bin")
 
     def install(self, spec, prefix):
-        make()
-        make("install")
-
-    def install(self, spec, prefix):
         with working_dir("kent/src/lib"):
             make()
         with working_dir("kent/src/htslib"):
