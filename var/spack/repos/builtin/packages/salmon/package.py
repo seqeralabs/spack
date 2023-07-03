@@ -56,10 +56,18 @@ class Salmon(CMakePackage):
     depends_on("libgff")
     depends_on("pkgconfig")
     depends_on("curl", when="@0.14.1:")
+    depends_on("htslib")
+
+    patch("fix_hts.patch", when="@1.10.2")
 
     conflicts("%gcc@:5.1", when="@0.14.1:")
 
     resources = [
+        (
+            "1.10.2",
+            "pufferfish",
+            "f225b74833f71dcf767a565345224357fb091f90ce79717abc836814d9ccd101",
+        ),
         (
             "1.9.0",
             "pufferfish",
