@@ -9,7 +9,7 @@ on:
   # Run on pull requests that modify this file
   pull_request:
     branches:
-      - develop
+      - cicd
     paths:
       - '.github/workflows/build-containers.yml'
       - 'share/spack/docker/*'
@@ -39,21 +39,9 @@ jobs:
         # 0: Container name (e.g. ubuntu-bionic)
         # 1: Platforms to build for
         # 2: Base image (e.g. ubuntu:18.04)
-        dockerfile: [[amazon-linux, 'linux/amd64,linux/arm64', 'amazonlinux:2'],
-                     [centos7, 'linux/amd64,linux/arm64,linux/ppc64le', 'centos:7'],
-                     [centos-stream, 'linux/amd64,linux/arm64,linux/ppc64le', 'centos:stream'],
-                     [leap15, 'linux/amd64,linux/arm64,linux/ppc64le', 'opensuse/leap:15'],
-                     [ubuntu-bionic, 'linux/amd64,linux/arm64,linux/ppc64le', 'ubuntu:18.04'],
-                     [ubuntu-focal, 'linux/amd64,linux/arm64,linux/ppc64le', 'ubuntu:20.04'],
-                     [ubuntu-jammy, 'linux/amd64,linux/arm64,linux/ppc64le', 'ubuntu:22.04'],
-                     [almalinux8, 'linux/amd64,linux/arm64,linux/ppc64le', 'almalinux:8'],
-                     [almalinux9, 'linux/amd64,linux/arm64,linux/ppc64le', 'almalinux:9'],
-                     [rockylinux8, 'linux/amd64,linux/arm64', 'rockylinux:8'],
-                     [rockylinux9, 'linux/amd64,linux/arm64', 'rockylinux:9'],
-                     [fedora37, 'linux/amd64,linux/arm64,linux/ppc64le', 'fedora:37'],
-                     [fedora38, 'linux/amd64,linux/arm64,linux/ppc64le', 'fedora:38']]
+        dockerfile: [[ubuntu-jammy, 'linux/amd64,linux/arm64,linux/ppc64le', 'ubuntu:22.04']]
     name: Build ${{ matrix.dockerfile[0] }}
-    if: github.repository == 'spack/spack'
+    if: github.repository == 'seqeralabs/spack' 
     steps:
       - name: Checkout
         uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # @v2
