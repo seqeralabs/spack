@@ -41,6 +41,9 @@ jobs:
         # 0: Container name (e.g. ubuntu-bionic)
         # 1: Platforms to build for
         # 2: Base image (e.g. ubuntu:18.04)
+        #
+        # Make sure to create the proper repos in ECR manually before pushing new images using the
+        # container name (see last step below in the job for full format).
         dockerfile: [[ubuntu-jammy, 'linux/amd64,linux/arm64,linux/ppc64le', 'ubuntu:22.04']]
     name: Build ${{ matrix.dockerfile[0] }}
     if: github.repository == 'seqeralabs/spack'
@@ -110,5 +113,5 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           tags: |
-            cr.seqera.io/spack/${{ env.container }}
-            cr.seqera.io/spack/${{ env.versioned }}
+            195996028523.dkr.ecr.eu-west-1.amazonaws.com/spack/${{ env.container }}
+            195996028523.dkr.ecr.eu-west-1.amazonaws.com/spack/${{ env.versioned }}
