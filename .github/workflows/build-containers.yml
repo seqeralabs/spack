@@ -113,5 +113,5 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           tags: |
-            195996028523.dkr.ecr.eu-west-1.amazonaws.com/spack/${{ env.container }}
-            195996028523.dkr.ecr.eu-west-1.amazonaws.com/spack/${{ env.versioned }}
+            195996028523.dkr.ecr.eu-west-1.amazonaws.com/wave/spack/${{ env.container }}
+            195996028523.dkr.ecr.eu-west-1.amazonaws.com/wave/spack/${{ env.versioned }}
