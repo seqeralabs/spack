@@ -104,6 +104,14 @@ jobs:
           registry: "195996028523.dkr.ecr.eu-west-1.amazonaws.com"
           ecr: true
 
+      - name: Create ECR repo for each image to build
+        id: baseURL
+        run: |
+          BASE_REPO_URL='wave/spack'
+          echo "BASE_REPO_URL=$BASE_REPO_URL" >> "$GITHUB_OUTPUT"
+          echo "Attempting to create image container repository: '${BASE_REPO_URL}/${{ matrix.dockerfile[0] }}'"
+          if aws --region eu-west-1 ecr create-repository --repository-name "${BASE_REPO_URL}/${{ matrix.dockerfile[0] }}" |& grep -q "already exists"; then echo "Repo already exists - doing nothing"; fi
+
       - name: Build & Deploy ${{ matrix.dockerfile[0] }}
         uses: docker/build-push-action@2eb1c1961a95fc15694676618e422e8ba1d63825 # @v2
         with:
@@ -113,5 +121,5 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           tags: |
-            195996028523.dkr.ecr.eu-west-1.amazonaws.com/wave/spack/${{ env.container }}
-            195996028523.dkr.ecr.eu-west-1.amazonaws.com/wave/spack/${{ env.versioned }}
+            195996028523.dkr.ecr.eu-west-1.amazonaws.com/${{ steps.baseURL.outputs.BASE_REPO_URL }}/${{ env.container }}
+            195996028523.dkr.ecr.eu-west-1.amazonaws.com/${{ steps.baseURL.outputs.BASE_REPO_URL }}/${{ env.versioned }}
