@@ -28,6 +28,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       packages: write
+      id-token: write             # Required to authenticate to AWS.
+
     strategy:
       # Even if one container fails to build we still want the others
       # to continue their builds.
@@ -39,6 +41,9 @@ jobs:
         # 0: Container name (e.g. ubuntu-bionic)
         # 1: Platforms to build for
         # 2: Base image (e.g. ubuntu:18.04)
+        #
+        # Make sure to create the proper repos in ECR manually before pushing new images using the
+        # container name (see last step below in the job for full format).
         dockerfile: [[ubuntu-jammy, 'linux/amd64,linux/arm64,linux/ppc64le', 'ubuntu:22.04']]
     name: Build ${{ matrix.dockerfile[0] }}
     if: github.repository == 'seqeralabs/spack'
@@ -85,12 +90,19 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@885d1462b80bc1c1c7f0b00334ad271f09369c55 # @v1
 
+      - name: Set AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-region: eu-west-1
+          role-to-assume: arn:aws:iam::195996028523:role/Management
+
       - name: Log in to Seqera Labs' Container Registry
         uses: docker/login-action@465a07811f14bebb1938fbed4728c6a1ff8901fc # @v1
         with:
-          registry: cr.seqera.io/spack
-          username: ${{ secrets.SEQERA_HARBOR_SPACK_USERNAME }}
-          password: ${{ secrets.SEQERA_HARBOR_SPACK_PASSWORD }}
+          # No need of username and password when used with aws-actions/configure-aws-credentials
+          # https://github.com/docker/login-action#aws-elastic-container-registry-ecr
+          registry: "195996028523.dkr.ecr.eu-west-1.amazonaws.com"
+          ecr: true
 
       - name: Build & Deploy ${{ matrix.dockerfile[0] }}
         uses: docker/build-push-action@2eb1c1961a95fc15694676618e422e8ba1d63825 # @v2
@@ -101,5 +113,5 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           tags: |
-            cr.seqera.io/spack/${{ env.container }}
-            cr.seqera.io/spack/${{ env.versioned }}
+            195996028523.dkr.ecr.eu-west-1.amazonaws.com/wave/spack/${{ env.container }}
+            195996028523.dkr.ecr.eu-west-1.amazonaws.com/wave/spack/${{ env.versioned }}
