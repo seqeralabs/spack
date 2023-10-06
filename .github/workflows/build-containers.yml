@@ -51,8 +51,10 @@ jobs:
       - name: Set Container Tag Normal (Nightly)
         run: |
           container="${{ matrix.dockerfile[0] }}:latest"
-          echo "container=${container}" >> $GITHUB_ENV
-          echo "versioned=${container}" >> $GITHUB_ENV
+          timestamp="${{ matrix.dockerfile[0] }}:$(TZ=UTC date '+%Y-%m-%d-%H-%M-%SZ')"
+          echo "container=${container}"   >> $GITHUB_ENV
+          echo "versioned=${container}"   >> $GITHUB_ENV
+          echo "timestamped=${timestamp}" >> $GITHUB_ENV
 
         # On a new release create a container with the same tag as the release.
       - name: Set Container Tag on Release
@@ -120,3 +122,4 @@ jobs:
           tags: |
             195996028523.dkr.ecr.eu-west-1.amazonaws.com/${{ steps.baseURL.outputs.BASE_REPO_URL }}/${{ env.container }}
             195996028523.dkr.ecr.eu-west-1.amazonaws.com/${{ steps.baseURL.outputs.BASE_REPO_URL }}/${{ env.versioned }}
+            195996028523.dkr.ecr.eu-west-1.amazonaws.com/${{ steps.baseURL.outputs.BASE_REPO_URL }}/${{ env.timestamped }}
