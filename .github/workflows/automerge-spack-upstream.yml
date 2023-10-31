@@ -1,0 +1,58 @@
+name: Automatic spack/spack merge into seqeralabs/spack
+on:
+  schedule:
+    # scheduled for 00:00 every day
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+    inputs:
+      upstream-repo:
+        description: 'Upstream GitHub repository owner/name'
+        required: true
+        default: 'spack/spack'
+      upstream-branch:
+        description: 'Upstream branch to merge from (e.g. main)'
+        required: true
+        default: 'develop'
+      origin-branch:
+        description: 'Branch to merge to'
+        required: true
+        default: 'develop'
+      useremail:
+        description: 'User email - required for git commits'
+        required: true
+        default: 'sa-eng-automation@seqera.io'
+      username:
+        description: 'User name - required for git commits'
+        required: true
+        default: 'Seqera DevOps Team via GHA'
+
+jobs:
+  merge-from-upstream-repo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.inputs.origin-branch || 'develop' }}
+          fetch-depth: 0
+          token: ${{ secrets.SEQERA_SA_ENG_TOKEN_SPACK_WORKFLOW }}
+
+      - name: Merge upstream branch
+        run: |
+          git remote add -f upstream "https://github.com/${upstream_repo}.git"
+          git remote -v
+          git branch --all
+          git config --list
+          git config user.email "${git_email}"
+          git config user.name "${git_username}"
+          git checkout "${origin_branch}"
+          git merge --allow-unrelated-histories "upstream/${upstream_branch}"
+          git push
+        env:
+          upstream_repo: ${{ github.event.inputs.upstream-repo || 'spack/spack' }}
+          upstream_branch: ${{ github.event.inputs.upstream-branch || 'develop' }}
+          origin_branch: ${{ github.event.inputs.origin-branch || 'develop' }}
+          git_email: ${{ github.event.inputs.useremail || 'sa-eng-automation@seqera.io' }}
+          git_username: ${{ github.event.inputs.username || 'Seqera DevOps Team via GHA' }}
+          git_user: '${{ vars.SEQERA_SA_ENG_USERNAME }}'
+          git_token: '${{ secrets.SEQERA_SA_ENG_TOKEN_SPACK_WORKFLOW }}'
