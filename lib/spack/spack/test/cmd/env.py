@@ -1006,21 +1006,7 @@ packages:
     assert any(x.satisfies("libelf@0.8.10") for x in specs)
 
 
-def test_bad_env_yaml_format(environment_from_manifest):
-    with pytest.raises(spack.config.ConfigFormatError) as e:
-        environment_from_manifest(
-            """\
-spack:
-  spacks:
-    - mpileaks
-"""
-        )
-
-        assert "'spacks' was unexpected" in str(e)
-
-    assert "test" not in env("list")
-
-
+@pytest.mark.regression("39248")
 def test_bad_env_yaml_format_remove(mutable_mock_env_path):
     badenv = "badenv"
     env("create", badenv)
@@ -1037,6 +1023,55 @@ def test_bad_env_yaml_format_remove(mutable_mock_env_path):
     assert badenv not in env("list")
 
 
+@pytest.mark.regression("39248")
+@pytest.mark.parametrize(
+    "error,message,contents",
+    [
+        (
+            spack.config.ConfigFormatError,
+            "not of type",
+            """\
+spack:
+  specs: mpi@2.0
+""",
+        ),
+        (
+            ev.SpackEnvironmentConfigError,
+            "duplicate key",
+            """\
+spack:
+  packages:
+    all:
+      providers:
+        mpi: [mvapich2]
+        mpi: [mpich]
+""",
+        ),
+        (
+            spack.config.ConfigFormatError,
+            "'specks' was unexpected",
+            """\
+spack:
+  specks:
+    - libdwarf
+""",
+        ),
+    ],
+)
+def test_bad_env_yaml_create_fails(tmp_path, mutable_mock_env_path, error, message, contents):
+    """Ensure creation with invalid yaml does NOT create or leave the environment."""
+    filename = tmp_path / ev.manifest_name
+    filename.write_text(contents)
+    env_name = "bad_env"
+    with pytest.raises(error, match=message):
+        env("create", env_name, str(filename))
+
+    assert env_name not in env("list")
+    manifest = mutable_mock_env_path / env_name / ev.manifest_name
+    assert not os.path.exists(str(manifest))
+
+
+@pytest.mark.regression("39248")
 @pytest.mark.parametrize("answer", ["-y", ""])
 def test_multi_env_remove(mutable_mock_env_path, monkeypatch, answer):
     """Test removal (or not) of a valid and invalid environment"""
@@ -1048,7 +1083,7 @@ def test_multi_env_remove(mutable_mock_env_path, monkeypatch, answer):
         env("create", e)
 
     # Ensure the bad environment contains invalid yaml
-    filename = mutable_mock_env_path / environments[1] / "spack.yaml"
+    filename = mutable_mock_env_path / environments[1] / ev.manifest_name
     filename.write_text(
         """\
     - libdwarf
@@ -1064,7 +1099,7 @@ def test_multi_env_remove(mutable_mock_env_path, monkeypatch, answer):
     if remove_environment is True:
         # Successfully removed (and reported removal) of *both* environments
         assert not all(e in env("list") for e in environments)
-        assert output.count("Successfully removed") == 2
+        assert output.count("Successfully removed") == len(environments)
     else:
         # Not removing any of the environments
         assert all(e in env("list") for e in environments)
@@ -2922,6 +2957,25 @@ def test_activate_temp(monkeypatch, tmpdir):
     active_env_var = next(line for line in shell.splitlines() if ev.spack_env_var in line)
     assert str(tmpdir) in active_env_var
     assert ev.is_env_dir(str(tmpdir))
+
+
+def test_activate_default(monkeypatch):
+    """Tests whether `spack env activate` creates / activates the default
+    environment"""
+    assert not ev.exists("default")
+
+    # Activating it the first time should create it
+    env("activate", "--sh")
+    env("deactivate", "--sh")
+    assert ev.exists("default")
+
+    # Activating it while it already exists should work
+    env("activate", "--sh")
+    env("deactivate", "--sh")
+    assert ev.exists("default")
+
+    env("remove", "-y", "default")
+    assert not ev.exists("default")
 
 
 def test_env_view_fail_if_symlink_points_elsewhere(tmpdir, install_mockery, mock_fetch):
