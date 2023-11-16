@@ -6,7 +6,7 @@
 from spack.package import *
 
 
-class BioconductorTximeta(RPackage):
+class RTximeta(RPackage):
     """Transcript Quantification Import with Automatic Metadata
 
     Transcript quantification import from Salmon and alevin with automatic

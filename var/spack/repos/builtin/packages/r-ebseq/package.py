@@ -6,7 +6,7 @@
 from spack.package import *
 
 
-class BioconductorEbseq(RPackage):
+class REbseq(RPackage):
     """An R package for gene and isoform differential expression analysis of RNA-seq data.
 
     R/EBSeq is an R package for identifying genes and isoforms differentially

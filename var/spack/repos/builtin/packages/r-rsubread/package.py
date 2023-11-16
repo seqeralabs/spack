@@ -6,7 +6,7 @@
 from spack.package import *
 
 
-class BioconductorRsubread(RPackage):
+class RRsubread(RPackage):
     """Mapping, quantification and variant analysis of sequencing data"""
 
     homepage = "https://bioconductor.org/packages/3.16/bioc/html/Rsubread.html"

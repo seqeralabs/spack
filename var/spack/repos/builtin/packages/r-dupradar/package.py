@@ -6,7 +6,7 @@
 from spack.package import *
 
 
-class BioconductorDupradar(RPackage):
+class RDupradar(RPackage):
     """Assessment of duplication rates in RNA-Seq datasets"""
 
     homepage = "https://bioconductor.org/packages/3.16/bioc/html/dupRadar.html"
@@ -19,4 +19,4 @@ class BioconductorDupradar(RPackage):
 
     depends_on("r-kernsmooth")
     depends_on("subread")
-    depends_on("bioconductor-rsubread")
+    depends_on("r-rsubread")
