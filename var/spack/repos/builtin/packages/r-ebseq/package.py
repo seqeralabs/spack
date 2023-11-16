@@ -21,7 +21,7 @@ class REbseq(RPackage):
     url = "https://bioconductor.org/packages/release/bioc/src/contrib/EBSeq_1.40.0.tar.gz"
     maintainers("pabloaledo")
 
-    bioc = "ebseq"
+    bioc = "EBSeq"
 
     version("1.40.0", sha256="a5d3a88743d61062c6d68a426b19c53a4afd2fa216abc884d42c187780994378")
     version("2.0.0", commit="f1d4e4419988ab98540739c9349559fd437cb59f")

@@ -13,7 +13,7 @@ class RDupradar(RPackage):
     url = "https://bioconductor.org/packages/release/bioc/src/contrib/dupRadar_1.30.0.tar.gz"
     maintainers("pabloaledo")
 
-    bioc = "dupradar"
+    bioc = "dupRadar"
 
     version("1.30.0", sha256="a299d7a4578047dfc19237e34255b0f50f70ce41d29762ef9f5a7741ba35aa3d")
     version("1.32.0", commit="7e07fc3a3901f8cae0203759fc24dd7df430a07f")

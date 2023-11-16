@@ -12,7 +12,7 @@ class RRsubread(RPackage):
     homepage = "https://bioconductor.org/packages/3.16/bioc/html/Rsubread.html"
     url = "https://bioconductor.org/packages/release/bioc/src/contrib/Rsubread_2.14.2.tar.gz"
 
-    bioc = "rsubread"
+    bioc = "Rsubread"
 
     depends_on("r-matrix")
     depends_on("zlib-api")
