@@ -18,3 +18,4 @@ class RRsubread(RPackage):
     depends_on("zlib-api")
 
     version("2.14.2", sha256="ac8be0fad0eb2743443e3a60a9a94eec78c746638aaccca70e7166d034dcebb5")
+    version("2.16.0", commit="62b92c9ed3fc2be89ed9f29e3db1809d1e115dbc")

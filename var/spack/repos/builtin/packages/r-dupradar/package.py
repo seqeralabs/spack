@@ -16,6 +16,7 @@ class RDupradar(RPackage):
     bioc = "dupradar"
 
     version("1.30.0", sha256="a299d7a4578047dfc19237e34255b0f50f70ce41d29762ef9f5a7741ba35aa3d")
+    version("1.32.0", commit="7e07fc3a3901f8cae0203759fc24dd7df430a07f")
 
     depends_on("r-kernsmooth")
     depends_on("subread")

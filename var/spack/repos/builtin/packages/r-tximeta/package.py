@@ -20,6 +20,7 @@ class RTximeta(RPackage):
     bioc = "tximeta"
 
     version("1.18.1", sha256="ee486fc4b2352e2998a3c0c2064449ebcf09b5815f982597ea58311dc8064408")
+    version("1.20.0", commit="c9cf6d6a80ca5129b91d723867aca0aec12e8299")
 
     depends_on("r", type=("build", "run"))
     depends_on("r-annotationdbi")
