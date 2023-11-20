@@ -9,13 +9,12 @@ from spack.package import *
 class RRsubread(RPackage):
     """Mapping, quantification and variant analysis of sequencing data"""
 
-    homepage = "https://bioconductor.org/packages/3.16/bioc/html/Rsubread.html"
-    url = "https://bioconductor.org/packages/release/bioc/src/contrib/Rsubread_2.14.2.tar.gz"
-
     bioc = "Rsubread"
 
-    depends_on("r-matrix")
-    depends_on("zlib-api")
-
-    version("2.14.2", sha256="ac8be0fad0eb2743443e3a60a9a94eec78c746638aaccca70e7166d034dcebb5")
+    version("2.14.2", commit="863bd98c6523b888da59335a6acb516d2676d412")
     version("2.16.0", commit="62b92c9ed3fc2be89ed9f29e3db1809d1e115dbc")
+
+    depends_on("r-matrix", type=('build', 'run'))
+    depends_on("r-r-utils", type=('build', 'run'))
+    depends_on('r', type=('build', 'run'))
+    depends_on("zlib-api", type=('build', 'run'))
