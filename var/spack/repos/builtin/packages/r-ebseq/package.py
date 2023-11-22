@@ -28,6 +28,6 @@ class REbseq(RPackage):
     depends_on("r-bh", type=('build', 'run'))
     depends_on("r-blockmodeling", type=('build', 'run'))
     depends_on("r-gplots", type=('build', 'run'))
-    depends_on("r-rcppeigen", type=('build', 'run'))
-    depends_on("r-rcpp", type=('build', 'run'))
+    depends_on("r-rcppeigen@0.3.2.9.0:", type=('build', 'run'))
+    depends_on("r-rcpp@0.12.11:", type=('build', 'run'))
     depends_on("r-testthat", type=('build', 'run'))
