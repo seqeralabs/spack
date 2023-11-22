@@ -16,7 +16,7 @@ class RDupradar(RPackage):
     version("1.30.0", commit="3d53d2d2e0c404a25845d78b8df8fee3f6b34eb5")
     version("1.32.0", commit="7e07fc3a3901f8cae0203759fc24dd7df430a07f")
 
+    depends_on('r@3.2:', type=('build', 'run'))
     depends_on("r-kernsmooth", type=('build', 'run'))
     depends_on("r-rsubread", type=('build', 'run'))
-    depends_on('r', type=('build', 'run'))
     depends_on("subread", type=('build', 'run'))

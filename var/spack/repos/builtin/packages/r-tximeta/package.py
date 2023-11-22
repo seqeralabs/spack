@@ -19,6 +19,7 @@ class RTximeta(RPackage):
     version("1.18.0", commit="8f87d53bbd6f2d97821dd8f7fdd54624928f862d")
     version("1.20.0", commit="c9cf6d6a80ca5129b91d723867aca0aec12e8299")
 
+    depends_on("r", type=("build", "run"))
     depends_on("r-annotationdbi", type=('build', 'run'))
     depends_on("r-annotationhub", type=('build', 'run'))
     depends_on("r-biocfilecache", type=('build', 'run'))
@@ -35,4 +36,3 @@ class RTximeta(RPackage):
     depends_on("r-summarizedexperiment", type=('build', 'run'))
     depends_on("r-tibble", type=('build', 'run'))
     depends_on("r-tximport", type=('build', 'run'))
-    depends_on("r", type=("build", "run"))
